@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3ple Nice Empire - Staff Portal v2.1</title>
+    <style>
+        /* === GLOBAL STYLES === */
+        body { margin: 0; font-family: Arial, sans-serif; background: #0f0f0f; color: white; }
+        .hidden { display: none; }
+        .dashboard { min-height: 100vh; padding: 20px; }
+        
+        /* === WELCOME & AI STYLES === */
+        .welcome-message { 
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(139, 92, 246, 0.2));
+            padding: 20px; border-radius: 10px; border: 1px solid #d4af37;
+            margin-bottom: 20px; animation: fadeIn 1s ease-in;
+        }
+        .ai-suggestions {
+            background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 10px;
+            border: 1px solid #10B981; margin: 20px 0;
+        }
+        .ai-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .suggestion-item {
+            background: rgba(255,255,255,0.05); padding: 15px; margin: 10px 0;
+            border-radius: 8px; border-left: 4px solid #10B981;
+        }
+        
+        /* === SOCIAL MEDIA STYLES === */
+        .social-media-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px; margin: 20px 0;
+        }
+        .social-card {
+            background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px;
+            border: 1px solid; text-align: center;
+        }
+        .social-metrics { display: flex; justify-content: space-around; margin-top: 15px; }
+        .metric { text-align: center; }
+        .metric-value { font-size: 1.5em; font-weight: bold; margin-bottom: 5px; }
+        
+        /* === VERSION & ANIMATIONS === */
+        .version-badge {
+            position: fixed; top: 20px; right: 20px; background: #d4af37;
+            color: #1a1a2e; padding: 5px 10px; border-radius: 20px;
+            font-size: 12px; font-weight: bold; z-index: 1000;
+        }
+        .floating { animation: floating 3s ease-in-out infinite; }
+        .performance-rating {
+            background: linear-gradient(135deg, #7C3AED, #5B21B6); padding: 15px;
+            border-radius: 10px; margin: 20px 0; text-align: center;
+        }
+        .rating-stars { font-size: 24px; margin: 10px 0; }
+        
+        /* === ANIMATIONS === */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes floating {
+            0% { transform: translate(0, 0px); }
+            50% { transform: translate(0, -10px); }
+            100% { transform: translate(0, 0px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Version Badge -->
+    <div class="version-badge">v2.1 - PRODUCTION</div>
+
+    <!-- MAIN LOGIN PORTAL -->
+    <div id="loginPortal" style="background: linear-gradient(135deg, #1a1a2e, #16213e); min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <div class="floating" style="background: rgba(255,255,255,0.1); padding: 40px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid #d4af37; max-width: 400px; width: 90%;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h1 style="color: #d4af37; margin: 0; font-size: 2.5em;">3NE</h1>
+                <h2 style="margin: 10px 0; color: white;">Staff Portal v2.1</h2>
+                <p style="color: #ccc;">World-Class Music Business System</p>
+                <div style="margin-top: 10px;">
+                    <span style="background: #10B981; color: white; padding: 3px 8px; border-radius: 10px; font-size: 12px;">Rated 4.8/5 Stars</span>
+                </div>
+            </div>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; color: #d4af37;">Office Email</label>
+                    <input type="email" id="staffEmail" required 
+                           style="width: 100%; padding: 12px; border: 1px solid #d4af37; border-radius: 5px; background: rgba(255,255,255,0.1); color: white; font-size: 16px;"
+                           placeholder="office@3pleniceempire.com">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 5px; color: #d4af37;">Password</label>
+                    <input type="password" id="staffPassword" required 
+                           style="width: 100%; padding: 12px; border: 1px solid #d4af37; border-radius: 5px; background: rgba(255,255,255,0.1); color: white; font-size: 16px;"
+                           placeholder="••••••••">
+                </div>
+                
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 5px; color: #d4af37;">Department</label>
+                    <select id="staffDepartment" required
+                            style="width: 100%; padding: 12px; border: 1px solid #d4af37; border-radius: 5px; background: rgba(255,255,255,0.1); color: white; font-size: 16px;">
+                        <option value="">Select Department</option>
+                        <option value="ceo">CEO Office</option>
+                        <option value="artist">Artist</option>
+                        <option value="creative">Creative Team</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="production">Music Production</option>
+                        <option value="merch">Merchandising</option>
+                        <option value="technical">Technical Team</option>
+                        <option value="finance">Finance</option>
+                        <option value="operations">Operations</option>
+                        <option value="legal">Legal Team</option>
+                    </select>
+                </div>
+                
+                <button type="submit" 
+                        style="width: 100%; padding: 15px; background: linear-gradient(135deg, #d4af37, #b8941f); border: none; border-radius: 5px; color: #1a1a2e; font-size: 16px; font-weight: bold; cursor: pointer;">
+                    Access My Portal
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <p style="color: #ccc; font-size: 12px;">System Performance: <span style="color: #10B981;">Excellent</span></p>
+                <p style="color: #ccc; font-size: 10px;">Need help? Contact IT Support: tech@3pleniceempire.com</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CEO DASHBOARD -->
+    <div id="ceoDashboard" class="hidden dashboard" style="background: linear-gradient(135deg, #1a1a2e, #000000);">
+        <header style="background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #d4af37; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 style="color: #d4af37; margin: 0;">CEO Command Center</h1>
+                    <p style="color: #ccc; margin: 5px 0;">Joseph Silas Kongnyu - 3ple Nice Empire</p>
+                    <p style="color: #d4af37; margin: 0; font-size: 12px;">ceo@3pleniceempire.com</p>
+                </div>
+                <button onclick="logout()" style="background: #d4af37; color: #1a1a2e; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- System Performance Rating -->
+        <div class="performance-rating">
+            <h3 style="color: white; margin: 0;">System Performance Rating</h3>
+            <div class="rating-stars">
+                ⭐⭐⭐⭐⭐ <span style="color: white; margin-left: 10px;">4.8/5 Stars</span>
+            </div>
+            <p style="color: #ccc; margin: 0; font-size: 14px;">Portal v2.1 - Enhanced with AI, Social Monitoring & Floating Animations</p>
+        </div>
+
+        <!-- Welcome Message -->
+        <div id="ceoWelcome" class="welcome-message">
+            <h2 style="color: #d4af37; margin-top: 0;">Welcome back, Joseph! 👑</h2>
+            <p style="color: #ccc; margin: 0;">Your leadership is driving 3ple Nice Empire to new heights. Here's your executive overview.</p>
+        </div>
+
+        <!-- AI Suggestions -->
+        <div class="ai-suggestions">
+            <div class="ai-header">
+                <h3 style="color: #10B981; margin: 0;">🤖 AI Assistant Recommendations</h3>
+            </div>
+            <div id="ceoSuggestions">
+                <!-- AI suggestions will be populated here -->
+            </div>
+        </div>
+
+        <!-- SOCIAL MEDIA MONITORING -->
+        <div style="background: rgba(59, 130, 246, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #3B82F6; margin-bottom: 20px;">
+            <h3 style="color: #3B82F6; margin-top: 0;">🌍 Social Media Monitoring Dashboard</h3>
+            <div class="social-media-grid">
+                <div class="social-card" style="border-color: #E1306C;">
+                    <h4 style="color: #E1306C; margin: 0;">Instagram</h4>
+                    <p style="color: #ccc; margin: 10px 0;">@3pleniceempire</p>
+                    <div class="social-metrics">
+                        <div class="metric">
+                            <div class="metric-value" style="color: #E1306C;">125K</div>
+                            <div style="color: #ccc; font-size: 12px;">Followers</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: #E1306C;">4.2%</div>
+                            <div style="color: #ccc; font-size: 12px;">Engagement</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="social-card" style="border-color: #1DA1F2;">
+                    <h4 style="color: #1DA1F2; margin: 0;">Twitter</h4>
+                    <p style="color: #ccc; margin: 10px 0;">@3pleNice</p>
+                    <div class="social-metrics">
+                        <div class="metric">
+                            <div class="metric-value" style="color: #1DA1F2;">89K</div>
+                            <div style="color: #ccc; font-size: 12px;">Followers</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: #1DA1F2;">3.8%</div>
+                            <div style="color: #ccc; font-size: 12px;">Engagement</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="social-card" style="border-color: #FF0000;">
+                    <h4 style="color: #FF0000; margin: 0;">YouTube</h4>
+                    <p style="color: #ccc; margin: 10px 0;">3ple Nice Music</p>
+                    <div class="social-metrics">
+                        <div class="metric">
+                            <div class="metric-value" style="color: #FF0000;">450K</div>
+                            <div style="color: #ccc; font-size: 12px;">Subscribers</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: #FF0000;">1.2M</div>
+                            <div style="color: #ccc; font-size: 12px;">Monthly Views</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="social-card" style="border-color: #1877F2;">
+                    <h4 style="color: #1877F2; margin: 0;">Facebook</h4>
+                    <p style="color: #ccc; margin: 10px 0;">3ple Nice Empire</p>
+                    <div class="social-metrics">
+                        <div class="metric">
+                            <div class="metric-value" style="color: #1877F2;">95K</div>
+                            <div style="color: #ccc; font-size: 12px;">Likes</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value" style="color: #1877F2;">2.9%</div>
+                            <div style="color: #ccc; font-size: 12px;">Engagement</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <h4 style="color: #3B82F6; margin-bottom: 10px;">📊 Social Performance Summary</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #10B981;">+15.8%</div>
+                        <div style="color: #ccc; font-size: 12px;">Total Growth This Month</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #10B981;">759K</div>
+                        <div style="color: #ccc; font-size: 12px;">Total Followers</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 1.2em; font-weight: bold; color: #10B981;">3.2%</div>
+                        <div style="color: #ccc; font-size: 12px;">Avg. Engagement Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUSINESS METRICS -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            <div style="background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #d4af37;">
+                <h3 style="color: #d4af37; margin-top: 0;">💰 Revenue Dashboard</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; font-weight: bold; color: #d4af37;">$124,580</div>
+                    <div style="color: #ccc;">Monthly Revenue</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #d4af37;">
+                <h3 style="color: #d4af37; margin-top: 0;">📊 Stream Performance</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; font-weight: bold; color: #d4af37;">2.4M</div>
+                    <div style="color: #ccc;">Monthly Streams</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #d4af37;">
+                <h3 style="color: #d4af37; margin-top: 0;">👥 Artist Growth</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; font-weight: bold; color: #d4af37;">+15%</div>
+                    <div style="color: #ccc;">Monthly Increase</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div style="background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #d4af37; margin-bottom: 30px;">
+            <h3 style="color: #d4af37; margin-top: 0;">🚀 Quick Actions</h3>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <button style="background: #d4af37; color: #1a1a2e; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    Approve Contracts
+                </button>
+                <button style="background: #d4af37; color: #1a1a2e; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    Review Royalties
+                </button>
+                <button style="background: #d4af37; color: #1a1a2e; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    Strategic Meetings
+                </button>
+            </div>
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+        <div style="background: rgba(212, 175, 55, 0.1); padding: 20px; border-radius: 10px; border: 1px solid #d4af37;">
+            <h3 style="color: #d4af37; margin-top: 0;">📈 Recent Activity</h3>
+            <div style="color: #ccc;">
+                <div style="padding: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.3);">🎵 King Silas new single reached 500K streams</div>
+                <div style="padding: 10px; border-bottom: 1px solid rgba(212, 175, 55, 0.3);">💰 Merch store generated $45,000 this month</div>
+                <div style="padding: 10px;">📅 GoldenMic Syndicate album launch scheduled</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARTIST DASHBOARD -->
+    <div id="artistDashboard" class="hidden dashboard" style="background: linear-gradient(135deg, #8B5CF6, #0F172A);">
+        <header style="background: rgba(139, 92, 246, 0.2); padding: 20px; border-radius: 10px; border: 1px solid #8B5CF6; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 style="color: #8B5CF6; margin: 0;">Artist Portal</h1>
+                    <p style="color: #ccc; margin: 5px 0;" id="artistName">King Silas - 3ple Nice Music</p>
+                    <p style="color: #8B5CF6; margin: 0; font-size: 12px;">kingsilas@3pleniceempire.com</p>
+                </div>
+                <button onclick="logout()" style="background: #8B5CF6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Welcome Message -->
+        <div id="artistWelcome" class="welcome-message">
+            <h2 style="color: #8B5CF6; margin-top: 0;">Welcome back, King Silas! 🎤</h2>
+            <p style="color: #ccc; margin: 0;">Your music is reaching new audiences every day. Ready to create your next hit?</p>
+        </div>
+
+        <!-- AI Suggestions -->
+        <div class="ai-suggestions">
+            <div class="ai-header">
+                <h3 style="color: #10B981; margin: 0;">🤖 AI Creative Assistant</h3>
+            </div>
+            <div id="artistSuggestions">
+                <!-- AI suggestions will be populated here -->
+            </div>
+        </div>
+
+        <!-- ARTIST METRICS -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+            <div style="background: rgba(139, 92, 246, 0.2); padding: 20px; border-radius: 10px; border: 1px solid #8B5CF6;">
+                <h3 style="color: #8B5CF6; margin-top: 0;">💰 My Royalties</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; font-weight: bold; color: #8B5CF6;">$24,680</div>
+                    <div style="color: #ccc;">This Month</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(139, 92, 246, 0.2); padding: 20px; border-radius: 10px; border: 1px solid #8B5CF6;">
+                <h3 style="color: #8B5CF6; margin-top: 0;">📊 My Streams</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; font-weight: bold; color: #8B5CF6;">1.2M</div>
+                    <div style="color: #ccc;">Monthly Streams</div>
+                </div>
+            </div>
+
+            <div style="background: rgba(139, 92, 246, 0.2); padding: 20px; border-radius: 10px; border: 1px solid #8B5CF6;">
+                <h3 style="color: #8B5CF6; margin-top: 0;">👥 Social Growth</h3>
+                <div style="text-align: center;">
+                    <div style="font-size: 2em; font-weight: bold; color: #8B5CF6;">+8.5K</div>
+                    <div style="color: #ccc;">New Followers</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MUSIC MANAGEMENT -->
+        <div style="background: rgba(139, 92, 246, 0.2); padding: 20px; border-radius: 10px; border: 1px solid #8B5CF6; margin-bottom: 20px;">
+            <h3 style="color: #8B5CF6; margin-top: 0;">🎵 Music Management</h3>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <button style="background: #8B5CF6; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    Upload New Track
+                </button>
+                <button style="background: #8B5CF6; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    View Analytics
+                </button>
+                <button style="background: #8B5CF6; color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                    Request Video
+                </button>
+            </div>
+        </div>
+
+        <!-- RECENT RELEASES -->
+        <div style="background: rgba(139, 92, 246, 0.2); padding: 20px; border-radius: 10px; border: 1px solid #8B5CF6;">
+            <h3 style="color: #8B5CF6; margin-top: 0;">🎶 My Recent Releases</h3>
+            <div style="color: #ccc;">
+                <div style="padding: 10px; border-bottom: 1px solid rgba(139, 92, 246, 0.3); display: flex; justify-content: space-between;">
+                    <span>"African King" - Single</span>
+                    <span style="color: #8B5CF6;">▶️ 450K streams</span>
+                </div>
+                <div style="padding: 10px; border-bottom: 1px solid rgba(139, 92, 246, 0.3); display: flex; justify-content: space-between;">
+                    <span>"Golden Times" - EP</span>
+                    <span style="color: #8B5CF6;">▶️ 320K streams</span>
+                </div>
+                <div style="padding: 10px; display: flex; justify-content: space-between;">
+                    <span>"Summer Vibes" - Collaboration</span>
+                    <span style="color: #8B5CF6;">▶️ 280K streams</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD MORE DASHBOARDS AS NEEDED -->
+
+    <script>
+        // === STAFF DATABASE ===
+        const staffDatabase = {
+            'ceo@3pleniceempire.com': { password: 'ceo123', department: 'ceo', name: 'Joseph Silas Kongnyu' },
+            'kingsilas@3pleniceempire.com': { password: 'artist123', department: 'artist', name: 'King Silas' },
+            'creative@3pleniceempire.com': { password: 'creative123', department: 'creative', name: 'Ruth Nwosu' },
+            'marketing@3pleniceempire.com': { password: 'marketing123', department: 'marketing', name: 'Victor Ayoola' },
+            'production@3pleniceempire.com': { password: 'production123', department: 'production', name: 'Kelvin Bright' },
+            'merch@3pleniceempire.com': { password: 'merch123', department: 'merch', name: 'Tonia Lawal' },
+            'tech@3pleniceempire.com': { password: 'tech123', department: 'technical', name: 'Emmanuel Bassey' },
+            'finance@3pleniceempire.com': { password: 'finance123', department: 'finance', name: 'Maryann Eze' },
+            'operations@3pleniceempire.com': { password: 'operations123', department: 'operations', name: 'Richard Daniels' },
+            'legal@3pleniceempire.com': { password: 'legal123', department: 'legal', name: 'Sandra Okeke' }
+        };
+
+        // === AI SUGGESTIONS DATABASE ===
+        const aiSuggestions = {
+            'ceo': [
+                "Your social media growth is strong at 15.8% monthly - consider allocating more budget to top-performing platforms",
+                "Stream performance suggests expanding to Asian markets could increase reach by 40%",
+                "Based on analytics, consider launching a premium subscription tier for exclusive content",
+                "Team efficiency is at 92% - consider implementing the new AI workflow automation",
+                "Revenue trends show 25% growth potential with current artist development pipeline"
+            ],
+            'artist': [
+                "Your engagement rate is high - consider releasing a behind-the-scenes video this week",
+                "Streaming data shows your audience peaks at 8 PM - schedule releases accordingly",
+                "Collaboration suggestions: Your sound matches well with DJ Phantom for a potential hit",
+                "Consider creating a 30-second teaser for social media to boost your next release",
+                "Your fan growth is strong in Nigeria - consider a targeted merch drop for that market"
+            ]
+            // Add more department suggestions as needed
+        };
+
+        // === TIME-BASED GREETINGS ===
+        function getTimeBasedGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return "Good morning";
+            if (hour < 18) return "Good afternoon";
+            return "Good evening";
+        }
+
+        // === WELCOME MESSAGES ===
+        function getWelcomeMessage(department, name) {
+            const timeGreeting = getTimeBasedGreeting();
+            const messages = {
+                'ceo': `${timeGreeting}, ${name}! 👑 Your leadership is driving 3ple Nice Empire to new heights.`,
+                'artist': `${timeGreeting}, ${name}! 🎤 Your creativity inspires us all. Ready to make history?`,
+                'creative': `${timeGreeting}, ${name}! 🎨 Your vision is shaping our brand identity beautifully.`
+            };
+            return messages[department] || `${timeGreeting}, ${name}! Welcome to your dashboard.`;
+        }
+
+        // === AI SUGGESTIONS ===
+        function getAISuggestions(department) {
+            const suggestions = aiSuggestions[department] || [
+                "Continue your excellent work - your performance metrics are strong",
+                "Consider documenting your processes for team training",
+                "Your department is contributing significantly to company growth"
+            ];
+            
+            const shuffled = [...suggestions].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 2 + Math.floor(Math.random() * 2));
+        }
+
+        // === LOGIN HANDLER ===
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('staffEmail').value;
+            const password = document.getElementById('staffPassword').value;
+            const department = document.getElementById('staffDepartment').value;
+
+            if (staffDatabase[email] && staffDatabase[email].password === password && staffDatabase[email].department === department) {
+                showDashboard(department, staffDatabase[email].name, email);
+            } else {
+                alert('Invalid login credentials. Please check your email, password, and department.');
+            }
+        }
+
+        // === SHOW DASHBOARD ===
+        function showDashboard(department, name, email) {
+            document.getElementById('loginPortal').classList.add('hidden');
+            
+            let dashboardId = department + 'Dashboard';
+            document.getElementById(dashboardId).classList.remove('hidden');
+            
+            // Update welcome message
+            const welcomeElement = document.getElementById(department + 'Welcome');
+            if (welcomeElement) {
+                const welcomeMessage = getWelcomeMessage(department, name);
+                welcomeElement.innerHTML = `<h2 style="color: ${getDepartmentColor(department)}; margin-top: 0;">${welcomeMessage}</h2><p style="color: #ccc; margin: 0;">${getWelcomeSubtitle(department)}</p>`;
+            }
+            
+            // Update name and email display
+            const nameElement = document.getElementById(department + 'Name');
+            if (nameElement) {
+                nameElement.textContent = `${name} - ${getDepartmentTitle(department)}`;
+                
+                const emailDisplay = nameElement.parentElement.querySelector('p:nth-child(3)');
+                if (emailDisplay) {
+                    emailDisplay.textContent = email;
+                }
+            }
+            
+            // Add AI suggestions
+            const suggestionsElement = document.getElementById(department + 'Suggestions');
+            if (suggestionsElement) {
+                const suggestions = getAISuggestions(department);
+                suggestionsElement.innerHTML = suggestions.map(suggestion => 
+                    `<div class="suggestion-item">${suggestion}</div>`
+                ).join('');
+            }
+        }
+
+        // === DEPARTMENT COLORS ===
+        function getDepartmentColor(department) {
+            const colors = {
+                'ceo': '#d4af37',
+                'artist': '#8B5CF6', 
+                'creative': '#EC4899',
+                'marketing': '#3B82F6',
+                'production': '#10B981',
+                'merch': '#F59E0B',
+                'technical': '#6B7280',
+                'finance': '#059669',
+                'operations': '#7C3AED',
+                'legal': '#DC2626'
+            };
+            return colors[department] || '#d4af37';
+        }
+
+        function getDepartmentTitle(department) {
+            const titles = {
+                'ceo': '3ple Nice Empire',
+                'artist': '3ple Nice Music',
+                'creative': 'Creative Director',
+                'marketing': 'Marketing Department'
+            };
+            return titles[department] || '3ple Nice Empire';
+        }
+
+        function getWelcomeSubtitle(department) {
+            const subtitles = {
+                'ceo': 'Strategic insights and empire overview at your fingertips.',
+                'artist': 'Your music, your stats, your creative space.',
+                'creative': 'Where vision meets execution in stunning detail.'
+            };
+            return subtitles[department] || 'Your professional workspace.';
+        }
+
+        // === LOGOUT ===
+        function logout() {
+            document.querySelectorAll('.dashboard').forEach(dashboard => {
+                dashboard.classList.add('hidden');
+            });
+            document.getElementById('loginPortal').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+        }
+
+        // === VOICE COMMANDS ===
+        class VoiceAssistant {
+            constructor() {
+                if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+                    this.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                    this.setupVoiceCommands();
+                }
+            }
+
+            setupVoiceCommands() {
+                this.recognition.continuous = true;
+                this.recognition.interimResults = true;
+                
+                this.recognition.onresult = (event) => {
+                    const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
+                    this.processCommand(command);
+                };
+                
+                this.recognition.start();
+            }
+
+            processCommand(command) {
+                if (command.includes('hey 3ne') || command.includes('hello empire')) {
+                    this.respond('Hello! 3ple Nice Empire assistant ready for commands.');
+                }
+                
+                if (command.includes('show revenue')) {
+                    this.showRevenueDashboard();
+                }
+                
+                if (command.includes('analyze social media')) {
+                    this.analyzeSocialMedia();
+                }
+            }
+
+            respond(message) {
+                const speech = new SpeechSynthesisUtterance(message);
+                window.speechSynthesis.speak(speech);
+            }
+
+            showRevenueDashboard() {
+                const revenueSection = document.querySelector('[data-section="revenue"]');
+                if (revenueSection) {
+                    revenueSection.scrollIntoView();
+                    this.respond('Showing revenue dashboard. Current monthly revenue is $124,580.');
+                }
+            }
+
+            analyzeSocialMedia() {
+                this.respond('Analyzing social media performance. Total growth is 15.8% this month across all platforms.');
+            }
+        }
+
+        // Initialize voice assistant
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            new VoiceAssistant();
+        }
+    </script>
+</body>
+</html>
